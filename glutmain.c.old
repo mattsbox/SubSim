@@ -1,0 +1,120 @@
+#include<GL/gl.h>
+#include<GL/glu.h>
+#include<GL/glut.h>
+#include<math.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"proton.h"
+#include"electron.h"
+float angle=0.0,red=1.0,blue=1.0,green=1.0;
+const float PI=3.1415926535;
+struct particle
+{
+	float x,y,z,r,theta;
+};
+struct particle electron;
+GLUquadricObj *quadric;
+void handleNormalKeys(unsigned char key,int x,int y)
+{
+	glutGetModifiers();
+	if(key==27)
+		exit(0);
+}
+void handleSpecialKeys(int key,int x,int y)
+{
+	switch(key)
+	{
+		case GLUT_KEY_F1:
+			red=1.0;
+			green=0.0;
+			blue=0.0;
+		break;
+		case GLUT_KEY_F2:
+			red=0.0;
+			green=1.0;
+			blue=0.0;
+		break;
+		case GLUT_KEY_F3:
+			red=0.0;
+			green=0.0;
+			blue=1.0;
+		break;
+		case GLUT_KEY_LEFT:
+			glRotatef(-10,0.0,1.0,0.0);
+		break;
+		case GLUT_KEY_RIGHT:
+			glRotatef(10,0.0,1.0,0.0);
+		break;
+		case GLUT_KEY_DOWN:
+			glRotatef(-10,1.0,0.0,0.0);	
+		break;
+		case GLUT_KEY_UP:
+			glRotatef(10,1.0,0.0,0.0);
+		break;
+	}
+}
+/*void drawSphere(void)
+{	
+	glPushMatrix();
+	glColor3f(red,green,blue);
+	glTranslatef(-0.5f,0.0f,0.0f);
+	gluSphere(quadric,0.25f,32,32);
+	glTranslatef(1.0f,0.0f,0.0f);
+	gluSphere(quadric,0.25f,32,32);
+	glTranslatef(-0.5f,1.0f,0.0f);
+	gluSphere(quadric,0.5f,32,32);
+	glTranslatef(0.0f,-2.0f,0.0f);
+	gluSphere(quadric,0.5f,32,32);
+	glPopMatrix();
+}*/
+void iterate(void)
+{
+	electron.theta+=0.1f;
+	electron.x=electron.r*cos(electron.theta);
+	electron.z=electron.r*sin(electron.theta);
+}
+void draw(void)
+{
+	iterate();
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	drawProton(0.0f,0.0f,0.0f,quadric);
+	drawElectron(electron.x,electron.y,electron.z,quadric);
+	glutSwapBuffers();
+}
+void resizeView(int w,int h)
+{
+	if(h==0)
+		h=1;
+	float ratio=1.0*w/h;
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glViewport(0,0,w,h);
+	gluPerspective(45,ratio,1,1000);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(0.0,0.0,5.0,0.0,0.0,-1.0,0.0,1.0,0.0);
+}
+int main(int argc, char **argv)
+{
+	electron.r=1.0f;
+	electron.theta=0.5*PI;
+	electron.x=electron.r*cos(electron.theta);
+	electron.y=0.0f;
+	electron.z=electron.r*sin(electron.theta);
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
+	glutInitWindowPosition(100,100);
+	glutInitWindowSize(400,400);
+	glutCreateWindow("Research Project v0.0");
+	glutDisplayFunc(draw);
+	glutReshapeFunc(resizeView);
+	glutIdleFunc(draw);
+	glutKeyboardFunc(handleNormalKeys);
+	glutSpecialFunc(handleSpecialKeys);
+	glEnable(GL_DEPTH_TEST);
+	quadric=gluNewQuadric();
+	gluQuadricNormals(quadric,GLU_SMOOTH);
+	gluQuadricTexture(quadric,GL_TRUE);
+	glutMainLoop();
+	return 0;
+}
