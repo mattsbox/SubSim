@@ -4,7 +4,7 @@ Compile Command (GTK+): gcc -Wall *.c *.h -o main -lGL -lGLU `pkg-config --cflag
 	Uses main.c as main file
 
 Compile Command (GLUT): gcc -Wall *.c *.h -o main -lGL -lGLU -lglut
-	Uses glutmain.c.old as main file
+	Uses glutmain.old as main file
 
 Backup to GitHub Command: git commit -m; git push backup master
 

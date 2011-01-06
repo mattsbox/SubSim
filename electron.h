@@ -1,3 +1,6 @@
+//SubSym
+//By Matt Craddock 2011
+
 #include<GL/gl.h>
 #include<GL/glu.h>
 #ifndef ELECTRON
