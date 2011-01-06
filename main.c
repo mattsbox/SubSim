@@ -26,7 +26,7 @@
 //Methods for drawing protons and electrons
 #include"proton.h"
 #include"electron.h"
-const float PI=3.1415926535;
+#include"constants.h"
 
 //Used to track the number of zooms for when resizing the screen resets all of them
 int z=0;
