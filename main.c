@@ -86,6 +86,11 @@ static gboolean handle_keys(GtkWidget *canvas,GdkEventKey *event,gpointer data)
 	}
 	return TRUE;
 }
+static gboolean handle_mouse (GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	printf("Hello");
+	return TRUE;
+}
 //Makes all of the time-based changes to the scene
 void iterate(void)
 {
@@ -232,13 +237,14 @@ int main(int argc, char **argv)
 	gtk_window_set_default_size(GTK_WINDOW(window),400,400);
 	
 	//Allows the window to recieve key press and key release events
-	gtk_widget_set_events(window,GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK);
+	gtk_widget_set_events(window,GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK);
 	
 	//Sets the handle_keys function to be called whenever a key is pressed 
 	//or released, without sending any additional information
 	g_signal_connect(window,"key-press-event",G_CALLBACK(handle_keys),NULL);
 	g_signal_connect(window,"key-release-event",G_CALLBACK(handle_keys),NULL);
-	
+	g_signal_connect(window,"button-release-event",G_CALLBACK(handle_mouse),NULL);
+
 	//Sets the proper callback functions for when closing the window is 
 	//proposed and executed
 	g_signal_connect(window,"delete-event",G_CALLBACK(window_delete_event),NULL);
