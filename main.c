@@ -23,6 +23,9 @@
 //Include for arrays
 //#include<stdlib.h>
 
+//The list class
+#include<list>
+
 //Methods for drawing protons and electrons
 #include"proton.h"
 #include"electron.h"
@@ -42,6 +45,8 @@ struct particle electron;
 
 //The quadric object for drawing all of the particles
 GLUquadricObj *quadric;
+
+list<void> drawVoids;
 
 //Callback function called on the key-release-event and key-press-event from GTK
 static gboolean handle_keys(GtkWidget *canvas,GdkEventKey *event,gpointer data)
@@ -88,7 +93,7 @@ static gboolean handle_keys(GtkWidget *canvas,GdkEventKey *event,gpointer data)
 }
 static gboolean handle_mouse (GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
-	printf("Hello");
+	
 	return TRUE;
 }
 //Makes all of the time-based changes to the scene
