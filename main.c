@@ -23,13 +23,11 @@
 //Include for arrays
 //#include<stdlib.h>
 
-//The list class
-#include<list>
-
 //Methods for drawing protons and electrons
 #include"proton.h"
 #include"electron.h"
 #include"constants.h"
+#include"linkedList.h"
 
 //Used to track the number of zooms for when resizing the screen resets all of them
 int z=0;
@@ -46,7 +44,7 @@ struct particle electron;
 //The quadric object for drawing all of the particles
 GLUquadricObj *quadric;
 
-list<void> drawVoids;
+LinkedList drawVoids;
 
 //Callback function called on the key-release-event and key-press-event from GTK
 static gboolean handle_keys(GtkWidget *canvas,GdkEventKey *event,gpointer data)
@@ -93,7 +91,11 @@ static gboolean handle_keys(GtkWidget *canvas,GdkEventKey *event,gpointer data)
 }
 static gboolean handle_mouse (GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
-	
+	GLint viewport[4];
+	GLubyte pixel[3];
+	glGetIntegerv(GL_VIEWPORT,viewport);
+	glReadPixels(event->x,viewport[3]-(event->y),1,1,GL_RGBA,GL_UNSIGNED_BYTE,(void *)pixel);
+	printf("R:%d G:%d B:%d\n",pixel[0],pixel[1],pixel[2]);
 	return TRUE;
 }
 //Makes all of the time-based changes to the scene
